@@ -1,0 +1,6 @@
+./app/build.gradle.kts
+./app/src/main/AndroidManifest.xml
+./app/src/main/kotlin/com/alad/audiobooster/MainActivity.kt
+./app/src/main/res/values/styles.xml
+./build.gradle.kts
+./settings.gradle.kts
