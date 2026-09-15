@@ -1,0 +1,53 @@
+name: Android Build
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK packages
+        run: |
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+          sdkmanager --version
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build debug APK
+        run: gradle --no-daemon --stacktrace assembleDebug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatgpt-audio-booster-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: debug-latest
+          name: "Debug build"
+          prerelease: true
+          files: app/build/outputs/apk/debug/app-debug.apk
