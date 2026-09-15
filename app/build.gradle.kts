@@ -4,8 +4,26 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-android { namespace = "com.alad.audiobooster"; compileSdk = 35
-    defaultConfig { applicationId = "com.alad.audiobooster"; minSdk = 29; targetSdk = 35; versionCode = 1; versionName = "0.1" }
+android {
+    namespace = "com.alad.audiobooster"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.alad.audiobooster"
+        minSdk = 29
+        targetSdk = 35
+        versionCode = 1
+        versionName = "0.1"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
